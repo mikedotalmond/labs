@@ -1,0 +1,20 @@
+'f' or double-click to enter full-screen
+'l', up-arrow or double click when in full-screen to load your own mp3
+
+Beat detection ported from BeatDetect, a part of the minim audio Java library, by Damien Di Fede. 
+http://code.compartmental.net/tools/minim/
+
+
+I modified a couple of classes Flint and Away3D to tweak some internal behaviour (find them in src/org and src/away3d)
+
+
+Required libraries:
+
+Away3D 4
+- https://github.com/away3d/away3d-core-fp11
+
+Flint particles
+- https://github.com/richardlord/Flint
+
+ASFFT (swc included in /lib)
+- https://code.google.com/p/in-spirit/wiki/ASFFT

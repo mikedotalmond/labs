@@ -62,7 +62,7 @@ package away3d.entities {
 		// 
 		
 		/**
-		 * Customised clone... only supports instances with BitmapMaterial materials
+		 * NOTE: Customised clone... only supports instances with BitmapMaterial materials
 		 * @return
 		 */
 		override public function clone():Object3D {

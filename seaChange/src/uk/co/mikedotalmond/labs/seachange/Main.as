@@ -1,36 +1,53 @@
+/*Copyright (c) 2011 Mike Almond
+
+Permission is hereby granted, free of charge, to any person 
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without restriction, 
+including without limitation the rights to use, copy, .modify,
+merge, publish, distribute, sublicense, and/or sell copies of 
+the Software, and to permit persons to whom the Software 
+is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.*/
+
 package uk.co.mikedotalmond.labs.seachange {
 	
 	import away3d.containers.ObjectContainer3D;
 	import away3d.containers.View3D;
-	import away3d.debug.AwayStats;
 	import away3d.filters.BloomFilter3D;
 	import away3d.filters.MotionBlurFilter3D;
-	import flash.events.FullScreenEvent;
-	import flash.events.KeyboardEvent;
-	import flash.net.FileFilter;
-	import flash.net.FileReference;
-	import flash.ui.Keyboard;
-	import flash.ui.Mouse;
-	import uk.co.mikedotalmond.labs.away3d4.filters.SoftNoiseFilter3D;
-	import uk.co.mikedotalmond.labs.away3d4.filters.tasks.Filter3DNoiseTask;
-	
-	import uk.co.mikedotalmond.labs.seachange.audio.AudioAnalysis;
-	import uk.co.mikedotalmond.labs.seachange.audio.BeatDetect;
-	import uk.co.mikedotalmond.labs.seachange.flint.AudioActivity;
-	import uk.co.mikedotalmond.labs.seachange.flint.Sparklets;
-	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageDisplayState;
 	import flash.display.StageQuality;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.events.FullScreenEvent;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Vector3D;
-	import flash.utils.ByteArray;
+	import flash.net.FileFilter;
+	import flash.net.FileReference;
+	import flash.ui.Keyboard;
+	import flash.ui.Mouse;
 	import flash.utils.getTimer;
 	
 	import org.flintparticles.integration.away3d.v4.A3D4Renderer;
+	import uk.co.mikedotalmond.labs.away3d4.filters.NoiseFilter3D;
+	import uk.co.mikedotalmond.labs.seachange.audio.AudioAnalysis;
+	import uk.co.mikedotalmond.labs.seachange.audio.BeatDetect;
+	import uk.co.mikedotalmond.labs.seachange.flint.AudioActivity;
+	import uk.co.mikedotalmond.labs.seachange.flint.Sparklets;
 	
 	final public class Main extends Sprite {
 		
@@ -42,17 +59,17 @@ package uk.co.mikedotalmond.labs.seachange {
 		private var _particleContainer	:ObjectContainer3D;
 		private var _moblur				:MotionBlurFilter3D;
 		private var _bloom				:BloomFilter3D;
-		private var _noise				:SoftNoiseFilter3D;
+		private var _noise				:NoiseFilter3D;
 		private var _bgCol				:uint = 0;
 		private var _bgColDest			:uint = 0;
 		private var _lastMs				:int = 0;
 		
-		private var _camThetaX			:Number = 0;
-		private var _camThetaXStep		:Number = (0.1 * Math.E) / (Math.E * Math.E * Math.E);
-		private var _camThetaY			:Number = 0;
-		private var _camThetaYStep		:Number = (0.1 * Math.LN2) / (Math.LN2 * Math.LN2 * Math.LN2);
-		private var _camThetaZ			:Number = 0;
-		private var _camThetaZStep		:Number = (0.1 * Math.LN10) / (Math.LN10 * Math.LN10 * Math.LN10);
+		private var _cX					:Number = 0;
+		private var _cXStep				:Number = (0.1 * Math.E) / (Math.E * Math.E * Math.E);
+		private var _cY					:Number = 0;
+		private var _cYStep				:Number = (0.1 * Math.LN2) / (Math.LN2 * Math.LN2 * Math.LN2);
+		private var _cZ					:Number = 0;
+		private var _cZStep				:Number = (0.1 * Math.LN10) / (Math.LN10 * Math.LN10 * Math.LN10);
 		
 		public var audioAnalysis		:AudioAnalysis;
 		private var _amplitudeFxScale	:Number;
@@ -60,8 +77,13 @@ package uk.co.mikedotalmond.labs.seachange {
 		private var _fr					:FileReference;
 		
 		public function Main(){
-			
 			super();
+			if (stage) init(null);
+			else addEventListener(Event.ADDED_TO_STAGE, init, false, 0, true);
+		}
+		
+		private function init(e:Event):void {
+			removeEventListener(Event.ADDED_TO_STAGE, init);
 			
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
@@ -87,8 +109,15 @@ package uk.co.mikedotalmond.labs.seachange {
 		private function onKey(e:KeyboardEvent):void {
 			const k:String = String.fromCharCode(e.charCode);
 			if(k == "l" || e.keyCode == Keyboard.UP) loadAudio();
-			
+			else if(k == "f") stage.displayState = StageDisplayState.FULL_SCREEN;			
 		}
+		
+		private function initAudio():void {
+			audioAnalysis = AudioActivity.AA = new AudioAnalysis();
+			audioAnalysis.loadMP3("sea change.mp3");
+			_amplitudeFxScale = 1.14;
+		}
+		
 		
 		private function loadAudio():void {
 			_fr = new FileReference();
@@ -99,7 +128,6 @@ package uk.co.mikedotalmond.labs.seachange {
 		
 		private function onFileSelect(e:Event):void {
 			_fr.removeEventListener(Event.CANCEL, onFileSelect);
-			
 			if (e.type == Event.SELECT) {
 				_fr.removeEventListener(Event.SELECT, onFileSelect);
 				_fr.addEventListener(Event.COMPLETE, onFileSelect);
@@ -113,36 +141,23 @@ package uk.co.mikedotalmond.labs.seachange {
 			}
 		}
 		
-		private function initAudio():void {
-			audioAnalysis = AudioActivity.AA = new AudioAnalysis();
-			
-			audioAnalysis.loadMP3("sea change.mp3");
-			_amplitudeFxScale = 1.14; // 0.7;
-			
-			//audioAnalysis.loadMP3("file:///C:/Users/Mike/Desktop/Foyer_Fire.mp3");
-			//_amplitudeFxScale = 0.71;
-		}
 		
 		private function onResize(e:Event):void {
 			const w:uint = 1280;
 			const h:uint = 640;
-			
 			const w2:uint = stage.displayState == StageDisplayState.FULL_SCREEN ? stage.fullScreenWidth : stage.stageWidth;
 			const h2:uint = stage.displayState == StageDisplayState.FULL_SCREEN ? stage.fullScreenHeight : stage.stageHeight;
-			
 			_view.width  = w2;// Math.min(w, w2);
 			_view.height = int(_view.width * (h / w)); // aspect correct
-			
-			//_view.x = int(w2 / 2 - _view.width / 2);
-			_view.y = int(h2 / 2 - _view.height / 2);
-			
-			//_view.scaleX = Math.max(1, w / w2);
-			//_view.scaleY = _view.scaleX;
-			
+			_view.y 	 = int(h2 / 2 - _view.height / 2);
 		}
 		
 		private function onClick(e:MouseEvent):void {
-			stage.displayState = StageDisplayState.FULL_SCREEN;
+			if (stage.displayState == StageDisplayState.FULL_SCREEN) {
+				loadAudio();
+			} else {
+				stage.displayState = StageDisplayState.FULL_SCREEN;
+			}
 		}
 		
 		private function initView3D():void {
@@ -156,7 +171,7 @@ package uk.co.mikedotalmond.labs.seachange {
 			
 			_moblur = new MotionBlurFilter3D(0.925);
 			_bloom 	= new BloomFilter3D(8, 8, 0.010, 2, 2);
-			_noise  = new SoftNoiseFilter3D(SoftNoiseFilter3D.TYPE_H, 0, 0, 0.66);
+			_noise  = new NoiseFilter3D(NoiseFilter3D.TYPE_H, 0.66);
 			_view.filters3d = [ _noise, _bloom, _moblur];
 			
 			//addChild(new AwayStats(_view, true, true));
@@ -218,21 +233,17 @@ package uk.co.mikedotalmond.labs.seachange {
 					_amplitudeFxScale += 0.02;
 				}
 				
-				_bgColDest = //				 0xff  << 24 |
-					(((Math.random() * intensity)) & 0xff) << 16 | (((Math.random() * intensity)) & 0xff) << 8 | (((Math.random() * intensity)) & 0xff);
+				_bgColDest = (((Math.random() * intensity)) & 0xff) << 16 | (((Math.random() * intensity)) & 0xff) << 8 | (((Math.random() * intensity)) & 0xff);
 			} else {
 				_particleContainer.z *= 0.9;
 				if (_particleContainer.z < 0.01) _particleContainer.z = 0;
 			}
 			
 			
-			_camThetaX += _camThetaXStep;
-			_camThetaY += _camThetaYStep;
-			_camThetaZ += _camThetaZStep;
-			_view.camera.x += ((b.isOnset ? (_view.camera.x < 0 ? 5.5 : -5.5) : Math.sin(_camThetaX/Math.PI) * 128) - _view.camera.x) * 0.1;
-			_view.camera.y = Math.sin(_camThetaZ/Math.PI) * 64;
+			_cX += _cXStep; _cY += _cYStep; _cZ += _cZStep;
+			_view.camera.x += ((b.isOnset ? (_view.camera.x < 0 ? 5.5 : -5.5) : Math.sin(_cX/Math.PI) * 128) - _view.camera.x) * 0.1;
+			_view.camera.y = Math.sin(_cZ/Math.PI) * 80;
 			_view.camera.lookAt(_emitterMedium.position);
-			_view.camera.z = -1100 + Math.sin(_camThetaZ) * 256;
 			
 			var peak:Number = 0;
 			if (audioAnalysis.audioChannel){
@@ -240,12 +251,13 @@ package uk.co.mikedotalmond.labs.seachange {
 				var r:Number = audioAnalysis.audioChannel.rightPeak * _amplitudeFxScale;
 				peak = Math.exp(Math.sqrt(l * l + r * r)) / Math.LOG2E;
 				
+			
 				_emitterMedium.sineZone.scaleY += ((l + r + (b.isOnset ? 4 : 0)) - _emitterMedium.sineZone.scaleY) * 0.8; 
 				_emitterMedium.sineZone.scaleX += (((2.25 - peak) + (b.isOnset ? 4 : 0)) - _emitterMedium.sineZone.scaleX) * 0.8;
 				
 				_view.camera.x += (((l - r) * 1024) - _view.camera.x) * 0.006;
-				_view.camera.y += (peak * Math.sin(l - r) * 1024 - _view.camera.y) * 0.003;
-				_view.camera.z += (-2250 + 2500 * peak - _view.camera.z) * 0.008;
+				_view.camera.y += (peak * Math.sin(l - r) * 1024 - _view.camera.y) * 0.003;	
+				_view.camera.z += ( -1200 + Math.cos(Math.sin(_cZ + (1 / peak))) * (348 * peak * _amplitudeFxScale) - _view.camera.z) * 0.01;
 			}
 			
 			_bloom.exposure += (((peak * 4.5) + b.intensity) - _bloom.exposure) * 0.0125;
@@ -258,7 +270,7 @@ package uk.co.mikedotalmond.labs.seachange {
 			_view.render();
 		}
 		
-		private function stepTowardRGB(current:uint, destination:uint, stepSize:uint):uint {
+		private static function stepTowardRGB(current:uint, destination:uint, stepSize:uint):uint {
 			if (current == destination) return current;
 			
 			var r1:uint = (current & 0xff0000) >> 16;

@@ -108,7 +108,7 @@ package org.flintparticles.integration.away3d.v4
 				if( obj.hasOwnProperty("material") )
 				{
 					var material:Object = obj["material"];
-					(material as MaterialBase).blendMode = "add"; //mmm
+					(material as MaterialBase).blendMode = "add"; //added - force add blendmode on evverything :)
 					if( material.hasOwnProperty( "colorTransform" ) )
 					{
 						material["colorTransform"] = particle.colorTransform;
