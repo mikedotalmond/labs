@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	This file is part of Apparat.
+	
+	Apparat is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Lesser General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	Apparat is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public License
+	along with Apparat. If not, see <http://www.gnu.org/licenses/>.
+	
+	Copyright (C) 2010 Joa Ebert
+	http://www.joa-ebert.com/
+-->
+	
+<project name="apparat-example" default="default" basedir="../">
+	<condition property="exe" value=".exe">
+		<os family="windows"/>
+	</condition>
+	<condition property="exe" value="">
+		<os family="unix"/>
+	</condition>
+	
+	<property name="dir.build" value="${basedir}/build"/>
+	<property name="dir.src" value="${basedir}/src"/>
+	<property name="dir.bin" value="${basedir}/bin"/>
+	
+	<property file="${dir.build}/build.properties"/>
+	
+	<fail unless="APPARAT_HOME"/>
+	<fail unless="SCALA_HOME"/>
+	<fail unless="FLEX_HOME"/>
+	<fail unless="flex.frameworks"/>
+	<fail unless="flex.bin"/>
+	<fail unless="flex.libs"/>
+	<fail unless="flex.compc"/>
+	<fail unless="flex.mxmlc"/>
+	<fail unless="flex.asdoc"/>
+	
+	<target name="default" depends="tdsi,reducer"/>
+	
+	<path id="apparat.path">
+      <fileset dir="${SCALA_HOME}" includes="lib/*.jar"/>
+      <fileset dir="${APPARAT_HOME}" includes="*.jar"/>
+    </path>
+
+	<taskdef resource="apparat/embedding/ant/antlib.xml">
+	  <classpath refid="apparat.path"/>
+	</taskdef>
+	
+	<target name="tdsi">
+		<tdsi in="${dir.bin}/carTest.swf">
+		  <classpath refid="apparat.path"/>
+		</tdsi>
+	</target>
+	
+	<target name="reducer">
+		<reducer in="${dir.bin}/carTest.swf" lzma="true">
+		  <classpath refid="apparat.path"/>
+		</reducer>
+	</target>
+</project>
