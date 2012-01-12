@@ -20,7 +20,7 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.*/
 
-package uk.co.mikedotalmond.labs.seachange {
+package mikedotalmond.labs.seachange {
 	
 	import away3d.containers.ObjectContainer3D;
 	import away3d.containers.View3D;
@@ -43,11 +43,11 @@ package uk.co.mikedotalmond.labs.seachange {
 	import flash.utils.getTimer;
 	
 	import org.flintparticles.integration.away3d.v4.A3D4Renderer;
-	import uk.co.mikedotalmond.labs.away3d4.filters.NoiseFilter3D;
-	import uk.co.mikedotalmond.labs.seachange.audio.AudioAnalysis;
-	import uk.co.mikedotalmond.labs.seachange.audio.BeatDetect;
-	import uk.co.mikedotalmond.labs.seachange.flint.AudioActivity;
-	import uk.co.mikedotalmond.labs.seachange.flint.Sparklets;
+	import mikedotalmond.labs.away3d4.filters.NoiseFilter3D;
+	import mikedotalmond.labs.seachange.audio.AudioAnalysis;
+	import mikedotalmond.labs.seachange.audio.BeatDetect;
+	import mikedotalmond.labs.seachange.flint.AudioActivity;
+	import mikedotalmond.labs.seachange.flint.Sparklets;
 	
 	final public class Main extends Sprite {
 		

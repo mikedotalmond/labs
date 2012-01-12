@@ -20,7 +20,7 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.*/
 
-package uk.co.mikedotalmond.labs.seachange.flint {
+package mikedotalmond.labs.seachange.flint {
 	
 	import away3d.entities.Sprite3D;
 	import flash.display.Bitmap;
@@ -52,13 +52,13 @@ package uk.co.mikedotalmond.labs.seachange.flint {
 
 	final public class Sparklets extends Emitter3D {
 		
-		[Embed(source="../../../../../../assets/blurb256.png")]
+		[Embed(source="../../../../assets/blurb256.png")]
 		public static const Blur256:Class;
 		
-		[Embed(source="../../../../../../assets/blurb128.png")]
+		[Embed(source="../../../../assets/blurb128.png")]
 		public static const Blur128:Class;
 		
-		[Embed(source = "../../../../../../assets/blurb8.png")]
+		[Embed(source = "../../../../assets/blurb8.png")]
 		public static const Blur8:Class;
 		
 		public static const SIZE_SMALL	:uint = 0;

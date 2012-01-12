@@ -20,15 +20,15 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.*/
 
-package uk.co.mikedotalmond.labs.seachange.flint {
+package mikedotalmond.labs.seachange.flint {
 	
 	import flash.utils.getTimer;
 	import org.flintparticles.common.activities.FrameUpdatable;
 	import org.flintparticles.common.emitters.Emitter;
 	import org.flintparticles.common.particles.Particle;
 	import org.flintparticles.threeD.particles.Particle3D;
-	import uk.co.mikedotalmond.labs.seachange.audio.AudioAnalysis;
-	import uk.co.mikedotalmond.labs.seachange.audio.BeatDetect;
+	import mikedotalmond.labs.seachange.audio.AudioAnalysis;
+	import mikedotalmond.labs.seachange.audio.BeatDetect;
 	
 	/**
 	 * ...

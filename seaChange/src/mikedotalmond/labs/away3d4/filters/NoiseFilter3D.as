@@ -20,14 +20,14 @@
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  DEALINGS IN THE SOFTWARE.*/
 
-package uk.co.mikedotalmond.labs.away3d4.filters {
+package mikedotalmond.labs.away3d4.filters {
 	
 	import away3d.core.managers.Stage3DProxy;
 	import away3d.filters.Filter3DBase;
 	import away3d.filters.tasks.Filter3DBlurTask;
 	import flash.display3D.textures.Texture;
-	import uk.co.mikedotalmond.labs.away3d4.filters.tasks.Filter3DNoiseCompositeTask;
-	import uk.co.mikedotalmond.labs.away3d4.filters.tasks.Filter3DNoiseTask;
+	import mikedotalmond.labs.away3d4.filters.tasks.Filter3DNoiseCompositeTask;
+	import mikedotalmond.labs.away3d4.filters.tasks.Filter3DNoiseTask;
 	
 	public final class NoiseFilter3D extends Filter3DBase {
 		

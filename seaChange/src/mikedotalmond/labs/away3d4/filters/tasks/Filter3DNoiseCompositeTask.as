@@ -20,7 +20,7 @@
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  DEALINGS IN THE SOFTWARE.*/
 
-package uk.co.mikedotalmond.labs.away3d4.filters.tasks {
+package mikedotalmond.labs.away3d4.filters.tasks {
 	import away3d.cameras.Camera3D;
 	import away3d.core.managers.Stage3DProxy;
 	import away3d.filters.tasks.Filter3DTaskBase;
