@@ -5,16 +5,12 @@ Beat detection ported from BeatDetect, a part of the minim audio Java library, b
 http://code.compartmental.net/tools/minim/
 
 
-I modified a couple of classes Flint and Away3D to tweak some internal behaviour (find them in src/org and src/away3d)
+I modified a couple of classes Flint and Away3D to tweak some internal behaviour, forks here:
+https://github.com/mikedotalmond/Flint
+https://github.com/mikedotalmond/away3d-core-fp11
 
 
 Required libraries:
-
-Away3D 4
-- https://github.com/away3d/away3d-core-fp11
-
-Flint particles
-- https://github.com/richardlord/Flint
 
 ASFFT (swc included in /lib)
 - https://code.google.com/p/in-spirit/wiki/ASFFT
