@@ -6,18 +6,18 @@
     <movie input="" />
     <movie path="bin\seaChange.swf" />
     <movie fps="30" />
-    <movie width="1280" />
-    <movie height="640" />
+    <movie width="960" />
+    <movie height="480" />
     <movie version="11" />
-    <movie minorVersion="0" />
+    <movie minorVersion="1" />
     <movie platform="Flash Player" />
     <movie background="#000000" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
     <class path="src" />
-    <class path="..\..\..\..\git\away3d-core-fp11\src" />
-    <class path="..\..\..\..\git\Flint\src" />
+    <class path="..\..\away3d-core-fp11\src" />
+    <class path="..\..\Flint\src" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -42,8 +42,8 @@
     <option linkReport="" />
     <option loadExterns="" />
     <option staticLinkRSL="True" />
-    <option additional="-swf-version=13" />
-    <option compilerConstants="" />
+    <option additional="" />
+    <option compilerConstants="-swf-version=12" />
     <option minorVersion="" />
   </build>
   <!-- SWC Include Libraries -->

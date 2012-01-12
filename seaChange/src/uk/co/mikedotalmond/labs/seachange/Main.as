@@ -114,7 +114,9 @@ package uk.co.mikedotalmond.labs.seachange {
 		
 		private function initAudio():void {
 			audioAnalysis = AudioActivity.AA = new AudioAnalysis();
-			audioAnalysis.loadMP3("sea change.mp3");
+			(stage.loaderInfo.loaderURL.indexOf("file://") == -1) 
+				?	audioAnalysis.loadMP3("./uploads/2011/10/fp11/seaChange/seaChange.mp3")
+				:	audioAnalysis.loadMP3("seaChange.mp3");
 			_amplitudeFxScale = 1.14;
 		}
 		
