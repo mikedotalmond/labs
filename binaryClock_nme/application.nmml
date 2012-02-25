@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<!-- metadata, make sure 'package' is at least 2 segments (ie. com.myproject) -->
+	<app file="BinaryClock" title="binaryClock_nme" main="Main" package="mikedotalmond.labs.binaryClock" 
+		version="1.0.0" company="Mike Almond - https://github.com/mikedotalmond" />
+		
+	<!-- output -->
+	<window width="800" height="600" fps="30" resizable="true" background="0xFFFFFF"/>
+	<window width="0" height="0" if="mobile"/> <!--default to fullscreen for mobile targets -->
+	
+	<set name="BUILD_DIR" value="bin" />
+	
+	<!-- classpath, haxe libs -->
+	<classpath name="src" />
+	<haxelib name="nme" />
+	<haxelib name="actuate" />
+	
+	<!-- assets -->
+	<icon name="assets/nme.svg" />
+	<assets path="assets" include="*" exclude="nme.svg" />
+	
+	<!-- DLLs -->
+	<ndll name="std" />
+	<ndll name="regexp" />
+	<ndll name="zlib" />
+	<ndll name="nme" haxelib="nme" />
+	
+	<!-- Windows app: hide console -->
+	<!--<setenv name="no_console" value="1" />-->
+</project>
