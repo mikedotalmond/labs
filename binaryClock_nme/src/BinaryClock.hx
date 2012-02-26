@@ -112,8 +112,12 @@ class BinaryClock extends Sprite {
 		stage.addEventListener(Event.ACTIVATE, onActivate);
 		stage.addEventListener(MouseEvent.CLICK, onClick);
 		stage.addEventListener(MouseEvent.DOUBLE_CLICK, onClick);
-		
+		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		reset();
+	}
+	
+	private function onKeyDown(e:KeyboardEvent):Void {
+		if (e.keyCode == Keyboard.ESCAPE) stage.displayState = StageDisplayState.NORMAL;
 	}
 	
 	/**
@@ -529,11 +533,11 @@ class BitShape extends Shape {
 		a -= pad;
 		value & 0x04 != 0 ? g.drawRoundRect( -half / 4, a, size / 4, size / 1.125, Math.round(round / 4), Math.round(round / 4)): Void; // 4
 		a -= pad/1.25;
-		value & 0x08 != 0 ? g.drawRoundRect( -half / 8, a, size / 8, size / 1.25, 0, 0) : Void; // 8
+		value & 0x08 != 0 ? g.drawRect( -half / 8, a, size / 8, size / 1.25) : Void; // 8
 		a -= pad/1.5;
-		value & 0x10 != 0 ? g.drawRoundRect( -half / 16, a, size / 16, size / 1.5, 0, 0) : Void; // 16
+		value & 0x10 != 0 ? g.drawRect( -half / 16, a, size / 16, size / 1.5) : Void; // 16
 		a -= pad/1.75;
-		value & 0x20 != 0 ? g.drawRoundRect( -half / 16, a, size / 16, size / 2, 0, 0) : Void; // 32
+		value & 0x20 != 0 ? g.drawRect( -half / 16, a, size / 16, size / 2) : Void; // 32
 		g.endFill();
 	}
 }
