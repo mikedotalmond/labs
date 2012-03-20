@@ -7,6 +7,7 @@
 	<!-- output -->
 	<window width="800" height="600" fps="30" resizable="true" background="0xFFFFFF"/>
 	<window width="0" height="0" if="mobile"/> <!--default to fullscreen for mobile targets -->
+	<window width="0" height="0" resizable="true" if="html5"/> <!-- fill browser -->
 	
 	<set name="BUILD_DIR" value="bin" />
 	

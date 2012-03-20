@@ -1,7 +1,7 @@
 /*
 Binary Clock - haXe NME
 
-Copyright (c) 2011 Mike Almond - @mikedotalmond
+Copyright (c) 2012 Mike Almond - @mikedotalmond
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -60,25 +60,28 @@ import nme.Vector;
  */
 class BinaryClock extends Sprite {
 	
+	static public var FRAMERATE_ACTIVE	:Int = 30;
+	static public var FRAMERATE_IDLE	:Int = 5;
+	
 	// change flags
-	static public var SECOND	:Int = 0x01;
-	static public var MINUTE	:Int = 0x02;
-	static public var HOUR		:Int = 0x04;
+	static public var SECOND			:Int = 0x01;
+	static public var MINUTE			:Int = 0x02;
+	static public var HOUR				:Int = 0x04;
 	
-	private var _lastH			:Int;
-	private var _lastM			:Int;
-	private var _lastS			:Int;
-	private var _changed		:Int;
+	private var _lastH					:Int;
+	private var _lastM					:Int;
+	private var _lastS					:Int;
+	private var _changed				:Int;
 	
-	private var _secondShapes	:Vector<BitShape>;
-	private var _minuteShapes	:Vector<BitShape>;
-	private var _hourShapes		:Vector<BitShape>;
+	private var _secondShapes			:Vector<BitShape>;
+	private var _minuteShapes			:Vector<BitShape>;
+	private var _hourShapes				:Vector<BitShape>;
 	
-	private var _seconds		:Sprite;
-	private var _minutes		:Sprite;
-	private var _hours			:Sprite;
-	private var _firstrun		:Bool;
-	private var _inverted		:Bool;
+	private var _seconds				:Sprite;
+	private var _minutes				:Sprite;
+	private var _hours					:Sprite;
+	private var _firstrun				:Bool;
+	private var _inverted				:Bool;
 	
 	public function new() {
 		super();
@@ -92,9 +95,7 @@ class BinaryClock extends Sprite {
 	public function init(e:Event):Void {
 		removeEventListener(Event.ADDED_TO_STAGE, init);
 		
-		stage.frameRate = 5;
-		alpha 			= 0.25;
-		
+		//alpha 		= 0.25;
 		_seconds 		= cast(addChild(new Sprite()), Sprite);
 		_minutes 		= cast(addChild(new Sprite()), Sprite);
 		_hours	 		= cast(addChild(new Sprite()), Sprite);
@@ -113,6 +114,7 @@ class BinaryClock extends Sprite {
 		stage.addEventListener(MouseEvent.CLICK, onClick);
 		stage.addEventListener(MouseEvent.DOUBLE_CLICK, onClick);
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		
 		reset();
 	}
 	
@@ -166,7 +168,6 @@ class BinaryClock extends Sprite {
 		_lastS 			= -1;
 		stage.frameRate = 30;
 		Actuate.reset();
-		Actuate.tween(this, 1.0, { alpha:1 } ).ease(Quad.easeOut);
 		addEventListener(Event.ENTER_FRAME, update);
 	}
 	
@@ -177,7 +178,6 @@ class BinaryClock extends Sprite {
 	private function onDeactivate(e:Event):Void {
 		removeEventListener(Event.ENTER_FRAME, update);
 		Actuate.reset();
-		alpha = 0.25;
 		stage.frameRate = 5;
 		System.gc();
 	}
@@ -187,9 +187,13 @@ class BinaryClock extends Sprite {
 	 * @param	e
 	 */
 	private function onResize(e:Event):Void {
+		
+		var w:Int = stage.stageWidth;
+		var h:Int = stage.stageHeight;
+		
 		graphics.clear();
 		graphics.beginFill(0);
-		graphics.drawRect(0,0,stage.stageWidth, stage.stageHeight);
+		graphics.drawRect(0, 0, w, h);
 		graphics.endFill();
 		
 		_hours.scaleX =
@@ -197,13 +201,13 @@ class BinaryClock extends Sprite {
 		_minutes.scaleX =
 		_minutes.scaleY =
 		_seconds.scaleX =
-		_seconds.scaleY = Math.max(0.7, Math.min(Math.min(1, stage.stageWidth / 768), stage.stageHeight / 768));
+		_seconds.scaleY = Math.max(0.7, Math.min(Math.min(1, w / 768), h / 768));
 		
-		_minutes.x = _seconds.x = _hours.x 	 = stage.stageWidth / 2;
-		_hours.y   = _minutes.y = _seconds.y = stage.stageHeight / 2;
+		_minutes.x = _seconds.x = _hours.x 	 = w / 2;
+		_hours.y   = _minutes.y = _seconds.y = h / 2;
 		
-		if (stage.stageWidth < 768) {
-			if (stage.stageWidth > stage.stageHeight) _hours.y = _minutes.y = _seconds.y = stage.stageHeight;
+		if (w < 768) {
+			if (w > h) _hours.y = _minutes.y = _seconds.y = h;
 		}
 	}
 	
@@ -256,7 +260,7 @@ class BinaryClock extends Sprite {
 			else if (hours == 6 ) i = -181;
 			else i = 360 - hours * 30;
 			#end
-			Actuate.tween(_hours, 1.0, {rotation:i} ).ease(Expo.easeInOut);
+			Actuate.tween(_hours, 1.0, { rotation:i } ).ease(Expo.easeInOut);
 		}
 		
 		if(_changed & MINUTE != 0){
@@ -273,7 +277,7 @@ class BinaryClock extends Sprite {
 			else if (mins == 30 ) i = -181;
 			else i = 360 - mins * 6;
 			#end
-			Actuate.tween(_minutes, 1, {rotation:i} ).ease(Expo.easeInOut);
+			Actuate.tween(_minutes, 1, { rotation:i } ).ease(Expo.easeInOut);
 		}
 		
 		if (_changed & SECOND != 0) {
@@ -290,10 +294,15 @@ class BinaryClock extends Sprite {
 			else if (secs == 30 ) i = -181;
 			else i = 360 - secs * 6;
 			#end
-			Actuate.tween(_seconds, secs == 0 ? 1 : 0.425, { rotation:i } ).ease(secs == 0 ? Expo.easeIn : Back.easeOut);
+			stage.frameRate = FRAMERATE_ACTIVE;
+			Actuate.tween(_seconds, secs == 0 ? 1 : 0.425, { rotation:i } ).ease(secs == 0 ? Expo.easeIn : Back.easeOut).onComplete(onTweenComplte);
 		}
 		
 		_firstrun = false;
+	}
+	
+	private function onTweenComplte():Void {
+		stage.frameRate = FRAMERATE_IDLE;
 	}
 	
 	/**
@@ -500,7 +509,7 @@ class BitShape extends Shape {
 	 * @param	e
 	 */
 	private function doDeactivate(e:Event = null):Void {
-		alpha 	= 0.150;
+		alpha 	= 0.15;
 		_active = false;
 	}
 	
