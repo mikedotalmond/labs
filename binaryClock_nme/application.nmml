@@ -5,7 +5,7 @@
 		version="1.0.0" company="Mike Almond - https://github.com/mikedotalmond" />
 		
 	<!-- output -->
-	<window width="800" height="600" fps="30" resizable="true" background="0xFFFFFF"/>
+	<window width="1280" height="800" fps="60" resizable="true" antialiasing="4" background="0x000000"/>
 	<window width="0" height="0" if="mobile"/> <!--default to fullscreen for mobile targets -->
 	<window width="0" height="0" resizable="true" if="html5"/> <!-- fill browser -->
 	
@@ -15,17 +15,18 @@
 	<classpath name="src" />
 	<haxelib name="nme" />
 	<haxelib name="actuate" />
+	<haxelib name="msignal" />
 	
 	<!-- assets -->
 	<icon name="assets/nme.svg" />
 	<assets path="assets" include="*" exclude="nme.svg" />
 	
-	<!-- DLLs -->
+	<!-- DLLs 
 	<ndll name="std" />
 	<ndll name="regexp" />
 	<ndll name="zlib" />
 	<ndll name="nme" haxelib="nme" />
-	
+	-->
 	<!-- Windows app: hide console -->
 	<!--<setenv name="no_console" value="1" />-->
 </project>
