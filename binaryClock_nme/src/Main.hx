@@ -25,10 +25,13 @@ THE SOFTWARE.
 package;
 
 import com.eclecticdesignstudio.motion.Actuate;
+import com.eclecticdesignstudio.motion.easing.Quad;
 import mikedotalmond.binaryclock.model.ClockTimer;
 import mikedotalmond.binaryclock.model.Digit;
 import mikedotalmond.binaryclock.model.Time;
 import mikedotalmond.binaryclock.view.BinaryClock;
+import nme.display.Stage;
+import nme.events.MouseEvent;
 import nme.system.System;
 
 import nme.display.Sprite;
@@ -52,8 +55,11 @@ class Main extends Sprite {
 	static public inline var FRAMERATE_ACTIVE	:Int = 60;
 	static public inline var FRAMERATE_IDLE		:Int = 30;
 	
-	private var clock		:BinaryClock;
-	private var clockTimer	:ClockTimer;
+	private var bg					:Sprite;
+	private var clock				:BinaryClock;
+	private var clockTimer			:ClockTimer;
+	
+	private var stageOrientation	:Int;
 	
 	public function new() {
 		super();
@@ -70,12 +76,23 @@ class Main extends Sprite {
 		stage.addEventListener(Event.DEACTIVATE, onDeactivate);
 		stage.addEventListener(Event.ACTIVATE, onActivate);
 		
+		bg			= new Sprite();
 		clock 		= new BinaryClock(onClockAnimateChange);
 		clockTimer 	= new ClockTimer(onTimeChange);
 		
+		bg.addEventListener(MouseEvent.CLICK, onBgTap);
+		
+		addChild(bg);
 		addChild(clock);
 		clockTimer.activate();
 		onResize(null);
+	}
+	
+	private function onBgTap(e:MouseEvent):Void {
+		bg.graphics.clear();
+		bg.graphics.beginFill(Std.int(Math.random()*0xffffff),0.2);
+		bg.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+		bg.graphics.endFill();
 	}
 	
 	private function onClockAnimateChange(animating:Bool):Void {
@@ -89,19 +106,28 @@ class Main extends Sprite {
 	 */
 	private function onResize(e:Event):Void {
 		
+		#if !flash
+		stageOrientation = Stage.getOrientation();
+		#end
+		
 		var w:Int = stage.stageWidth;
 		var h:Int = stage.stageHeight;
+		 
+		bg.graphics.clear();
+		bg.graphics.beginFill(0);
+		bg.graphics.drawRect(0, 0, w, h);
+		bg.graphics.endFill();
 		
-		clock.x = w / 2;
-		clock.y = h / 2;
+		clock.resize(w, h);
+		clock.x = orientationIsLansdcape() ? w / 3.45 : w / 2;
+		clock.y = orientationIsPortrait() ? h / 3.125 : h / 2;
 	}
-	
 	
 	/**
 	 * 
 	 * @param	e
 	 */
-	public function onActivate(e:Event):Void {
+	private function onActivate(e:Event):Void {
 		Actuate.reset();
 		clock.activate();
 		stage.frameRate = FRAMERATE_ACTIVE;
@@ -112,7 +138,7 @@ class Main extends Sprite {
 	 * 
 	 * @param	e
 	 */
-	public function onDeactivate(e:Event):Void {
+	private function onDeactivate(e:Event):Void {
 		stage.frameRate = FRAMERATE_IDLE;
 		clock.deactivate();
 		Actuate.reset();
@@ -127,6 +153,25 @@ class Main extends Sprite {
 	private function onTimeChange(time:Time):Void {
 		clock.update(time);
 	}
+	
+	
+	public function orientationIsLansdcape():Bool {
+		#if flash
+		return true;
+		#else
+		return stageOrientation == Stage.OrientationLandscapeLeft || stageOrientation == Stage.OrientationLandscapeRight;
+		#end
+	}
+	
+	
+	public function orientationIsPortrait():Bool {
+		#if flash
+		return false;
+		#else
+		return stageOrientation == Stage.OrientationPortrait || stageOrientation == Stage.OrientationPortraitUpsideDown;
+		#end
+	}
+	
 	
 	static public function main() {
 		

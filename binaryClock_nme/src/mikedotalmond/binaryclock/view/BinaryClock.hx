@@ -90,7 +90,7 @@ class BinaryClock extends Sprite {
 		minutes					= cast(addChild(new Sprite()), Sprite);
 		hours					= cast(addChild(new Sprite()), Sprite);
 		
-		opaqueBackground 		= 0x000000;
+		//opaqueBackground 		= 0x000000;
 		seconds.mouseEnabled 	= 
 		minutes.mouseEnabled 	= 
 		hours.mouseEnabled 		= false;
@@ -223,6 +223,11 @@ class BinaryClock extends Sprite {
 		}
 		
 		firstrun = false;
+	}
+	
+	public function resize(w:Int, h:Int) {
+		var min:Int = w < h ? w : h;
+		scaleX = scaleY = 1 * min / 800;
 	}
 	
 	/**
