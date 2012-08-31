@@ -22,7 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package mikedotalmond.binaryclock.colour;
+package mikedotalmond.binaryclock.utils;
+
 import nme.Vector;
 
 /**

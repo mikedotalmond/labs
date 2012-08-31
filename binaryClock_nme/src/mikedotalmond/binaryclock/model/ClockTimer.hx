@@ -48,7 +48,7 @@ class ClockTimer {
 	 * @param	?autoStart
 	 * @param	?updateDelay, defaults to 40ms
 	 */
-	public function new(changeCallback:Time->Void, ?autoStart:Bool = false, ?updateInterval:Float = 40) {
+	public function new(changeCallback:Time->Void, ?autoStart:Bool = false, ?updateInterval:Float = 20) {
 		
 		change 	= changeCallback;
 		

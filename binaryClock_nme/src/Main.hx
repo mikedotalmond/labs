@@ -29,7 +29,9 @@ import com.eclecticdesignstudio.motion.easing.Quad;
 import mikedotalmond.binaryclock.model.ClockTimer;
 import mikedotalmond.binaryclock.model.Digit;
 import mikedotalmond.binaryclock.model.Time;
+import mikedotalmond.binaryclock.utils.Colour;
 import mikedotalmond.binaryclock.view.BinaryClock;
+import nme.display.BlendMode;
 import nme.display.Stage;
 import nme.events.MouseEvent;
 import nme.system.System;
@@ -60,6 +62,9 @@ class Main extends Sprite {
 	private var clockTimer			:ClockTimer;
 	
 	private var stageOrientation	:Int;
+	//private var gestures			:GestureManager;
+	private var clockShine			:Sprite;
+	private var clockBg				:Sprite;
 	
 	public function new() {
 		super();
@@ -75,22 +80,26 @@ class Main extends Sprite {
 		stage.addEventListener(Event.RESIZE, onResize);
 		stage.addEventListener(Event.DEACTIVATE, onDeactivate);
 		stage.addEventListener(Event.ACTIVATE, onActivate);
+		stage.addEventListener(MouseEvent.CLICK, onBgTap);
 		
 		bg			= new Sprite();
 		clock 		= new BinaryClock(onClockAnimateChange);
 		clockTimer 	= new ClockTimer(onTimeChange);
 		
-		bg.addEventListener(MouseEvent.CLICK, onBgTap);
+		
+		//gestures 	= new GestureManager(bg);
 		
 		addChild(bg);
 		addChild(clock);
+		
 		clockTimer.activate();
 		onResize(null);
+		
 	}
 	
 	private function onBgTap(e:MouseEvent):Void {
 		bg.graphics.clear();
-		bg.graphics.beginFill(Std.int(Math.random()*0xffffff),0.2);
+		bg.graphics.beginFill(Colour.adjustHSL(0xff0000, Math.random(), 0.9, 0.1));
 		bg.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
 		bg.graphics.endFill();
 	}
@@ -112,15 +121,17 @@ class Main extends Sprite {
 		
 		var w:Int = stage.stageWidth;
 		var h:Int = stage.stageHeight;
-		 
+		
 		bg.graphics.clear();
 		bg.graphics.beginFill(0);
 		bg.graphics.drawRect(0, 0, w, h);
 		bg.graphics.endFill();
 		
 		clock.resize(w, h);
-		clock.x = orientationIsLansdcape() ? w / 3.45 : w / 2;
-		clock.y = orientationIsPortrait() ? h / 3.125 : h / 2;
+		clock.x = orientationIsLansdcape() ? w / 2 : w / 2;
+		clock.y = orientationIsPortrait()  ? h / 2 : h / 2;
+		//clock.x = orientationIsLansdcape() ? w / 3.45 : w / 2;
+		//clock.y = orientationIsPortrait()  ? h / 3.125 : h / 2;
 	}
 	
 	/**

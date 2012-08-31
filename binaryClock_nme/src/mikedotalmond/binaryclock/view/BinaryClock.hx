@@ -29,7 +29,7 @@ import com.eclecticdesignstudio.motion.easing.Back;
 import com.eclecticdesignstudio.motion.easing.Expo;
 import com.eclecticdesignstudio.motion.easing.Quad;
 
-import mikedotalmond.binaryclock.colour.Colour;
+import mikedotalmond.binaryclock.utils.Colour;
 import mikedotalmond.binaryclock.model.Time;
 
 import nme.display.DisplayObjectContainer;
@@ -111,12 +111,13 @@ class BinaryClock extends Sprite {
 		while (minutes.numChildren > 0) minutes.removeChildAt(0);
 		while (hours.numChildren > 0) hours.removeChildAt(0);
 		
-		secondShapes 	= getBitShapes(seconds, 200, 60, 22, -32, true, Colour.getHueRange(Colour.adjustHSL(0xFf0000), 60));
-		minuteShapes 	= getBitShapes(minutes, 80, 60, 11, -22, false, Colour.getHueRange(Colour.adjustHSL(0xFf0000, 0, 0.66, 0.66), 60));
-		hourShapes 		= getBitShapes(hours, 12, 12, 10, -12, false, Colour.getHueRange(Colour.adjustHSL(0xFf0000, 0, 0.33, 0.30), 12));
+		secondShapes 	= getBitShapes(seconds, 200, 60, 22, -32, Colour.getHueRange(Colour.adjustHSL(0xFf0000), 60));
+		minuteShapes 	= getBitShapes(minutes, 80, 60, 11, -22, Colour.getHueRange(Colour.adjustHSL(0xFf0000, 0, 0.75, 0.66), 60));
+		hourShapes 		= getBitShapes(hours, 12, 12, 10, -12, Colour.getHueRange(Colour.adjustHSL(0xFf0000, 0, 0.55, 0.66), 12));
 		
-		minutes.cacheAsBitmap = true;
-		hours.cacheAsBitmap = true;
+		//seconds.cacheAsBitmap = true;
+		//minutes.cacheAsBitmap = true;
+		//hours.cacheAsBitmap = true;
 		
 		activate();
 	}
@@ -227,7 +228,7 @@ class BinaryClock extends Sprite {
 	
 	public function resize(w:Int, h:Int) {
 		var min:Int = w < h ? w : h;
-		scaleX = scaleY = 1 * min / 800;
+		scaleX = scaleY = min / 800;
 	}
 	
 	/**
@@ -236,7 +237,7 @@ class BinaryClock extends Sprite {
 	 */
 	private function onTweenStart(target:DisplayObject=null) {
 		if (activeTweens == 0) animateChange(true);
-		if(target != null) target.cacheAsBitmap = false;
+		//if(target != null) target.cacheAsBitmap = false;
 		activeTweens++;
 	}
 	
@@ -245,8 +246,8 @@ class BinaryClock extends Sprite {
 	 * @param	target
 	 */
 	private function onTweenComplete(target:DisplayObject):Void {
-		activeTweens -= activeTweens == 0 ? 0 : 1;
-		if(target != null) target.cacheAsBitmap = true;
+		activeTweens = activeTweens == 0 ? 0 : activeTweens-1;
+		//if(target != null) target.cacheAsBitmap = true;
 		if (activeTweens == 0) animateChange(false);		
 	}
 	
@@ -261,7 +262,7 @@ class BinaryClock extends Sprite {
 	 * @param	colourRange
 	 * @return
 	 */
-	private static function getBitShapes(container:DisplayObjectContainer, radius:Float, count:Int, size:Float, pad:Int, round:Bool, colourRange:Vector<Int>):Vector<BitShape> {
+	private static function getBitShapes(container:DisplayObjectContainer, radius:Float, count:Int, size:Float, pad:Int, colourRange:Vector<Int>):Vector<BitShape> {
 		var out		:Vector<BitShape> = new Vector<BitShape>();
 		var i		:Int = -1;
 		var step	:Float =  Math.PI * 2 / count;
@@ -269,7 +270,7 @@ class BinaryClock extends Sprite {
 		var s		:BitShape;
 		
 		while (++i < count) {
-			s 			= new BitShape(container, i, colourRange[i], size, pad, round);
+			s 			= new BitShape(container, i, colourRange[i], size, pad);
 			angle 		= step * i - Math.PI / 2;
 			s.x 		= Math.cos( angle ) * radius;
 			s.y 		= Math.sin( angle ) * radius;

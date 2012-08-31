@@ -7,7 +7,7 @@
     <movie path="application.nmml" />
     <movie fps="60" />
     <movie width="1280" />
-    <movie height="800" />
+    <movie height="720" />
     <movie version="3" />
     <movie minorVersion="0" />
     <movie platform="NME" />
@@ -16,21 +16,21 @@
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
     <class path="src" />
-    <class path="bin/flash/haxe" />
+    <class path="bin/android/haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="nme_install_tool&#xA;web&#xA;code_completion" />
+    <option directives="nme_install_tool&#xA;mobile&#xA;android&#xA;code_completion" />
     <option flashStrict="False" />
     <option mainClass="ApplicationMain" />
     <option enabledebug="True" />
-    <option additional="-swf-version 10.1" />
+    <option additional="--remap flash:nme" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
     <library name="nme" />
     <library name="actuate" />
-    <library name="msignal" />
+    <library name="swf" />
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
@@ -38,7 +38,7 @@
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>
-    <!-- example: <asset path="..." id="..." update="..." glyphs="..." mode="..." place="..." sharepoint="..." /> -->
+    <asset path="assets\swf\assets.swf" />
   </library>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>
